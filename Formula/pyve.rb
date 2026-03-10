@@ -1,8 +1,8 @@
 class Pyve < Formula
   desc "A single, easy entry point for Python virtual environments"
   homepage "https://pointmatic.github.io/pyve"
-  url "https://github.com/pointmatic/pyve/archive/refs/tags/v1.5.4.tar.gz"
-  sha256 "8d1a7797bde41cf8c5d99f157ee42747db3b5192764a7800f0897308ac09e1d8"
+  url "https://github.com/pointmatic/pyve/archive/refs/tags/v1.6.1.tar.gz"
+  sha256 "9b03bc3a6a07bf290e457ee2e6ec3bdf5db26a784c4e4e7a9c3e7316e986b7eb"
   license "Apache-2.0"
 
   def install
