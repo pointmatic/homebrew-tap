@@ -1,8 +1,8 @@
 class Gitbetter < Formula
   desc "Streamline repetitive git workflows (push, tag) into single interactive commands"
   homepage "https://github.com/pointmatic/gitbetter"
-  url "https://github.com/pointmatic/gitbetter/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "e1fc1b527b8b2fa73a4564a417fe54822968c1cee1513f5be503185df716efdf"
+  url "https://github.com/pointmatic/gitbetter/archive/refs/tags/v1.0.1.tar.gz"
+  sha256 "a9163c7b799aaa16d2ba2fa222f1183f299dfbceeaf30e0ec530935f5dd9c292"
   license "Apache-2.0"
 
   def install
