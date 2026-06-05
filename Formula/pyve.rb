@@ -1,5 +1,5 @@
 class Pyve < Formula
-  desc "A single, easy entry point for Python virtual environments"
+  desc "Single, easy entry point for all your virtual environments"
   homepage "https://pointmatic.github.io/pyve"
   url "https://github.com/pointmatic/pyve/archive/refs/tags/v2.8.0.tar.gz"
   sha256 "afdadfbace10ccce95c8c0bdd5c47beccb932f982898dcbf007568f0ed464c48"
