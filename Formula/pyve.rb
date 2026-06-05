@@ -5,6 +5,11 @@ class Pyve < Formula
   sha256 "afdadfbace10ccce95c8c0bdd5c47beccb932f982898dcbf007568f0ed464c48"
   license "Apache-2.0"
 
+  # tomllib (used by pyve) requires Python >= 3.11. This brew Python only
+  # needs to be a viable bootstrap interpreter; the toolchain venv itself is
+  # still version-keyed to DEFAULT_PYTHON_VERSION via _self_install_toolchain_python.
+  depends_on "python@3.12"
+
   def install
     # Install pyve.sh and lib/ into libexec so SCRIPT_DIR resolution
     # finds lib/ relative to the actual script location.
