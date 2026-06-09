@@ -41,6 +41,31 @@ class Pyve < Formula
     opoo "pyve: toolchain/project-guide provisioning was skipped; run 'pyve self provision' later."
   end
 
+  # `pyve self provision` (run at install/upgrade time, above) creates files
+  # OUTSIDE Homebrew's prefix that `brew uninstall pyve` cannot clean up:
+  #   - the toolchain Python venv at ~/.local/share/pyve/toolchain/
+  #   - the project-guide shim at ~/.local/bin/project-guide
+  # Homebrew has no supported post_uninstall hook for paths outside its
+  # prefix, so these are orphaned on `brew uninstall`. Point users at the
+  # brew-safe teardown so they can remove them deliberately.
+  def caveats
+    <<~EOS
+      pyve hosts a toolchain Python venv and the project-guide CLI outside
+      Homebrew's prefix:
+        ~/.local/share/pyve/toolchain/   (toolchain Python + hosted tools)
+        ~/.local/bin/project-guide        (project-guide shim)
+
+      `brew uninstall pyve` does NOT remove these. For full teardown of the
+      hosted tools, run before (or after) uninstalling:
+        pyve self unprovision --all
+
+      To upgrade just the hosted project-guide without re-running brew:
+        pyve self provision        # always pip-installs --upgrade
+      (`pyve update` refreshes a project's scaffolding; it does NOT bump the
+      hosted project-guide version.)
+    EOS
+  end
+
   test do
     assert_match "pyve version #{version}", shell_output("#{bin}/pyve --version")
   end
