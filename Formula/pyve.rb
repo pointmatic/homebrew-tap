@@ -25,6 +25,22 @@ class Pyve < Formula
     chmod 0755, bin/"pyve"
   end
 
+  # `pyve self install` (the source-install path) refuses to run for
+  # Homebrew-managed installs, so it never provisions Pyve's toolchain venv
+  # or the hosted project-guide. `pyve self provision` does exactly that
+  # provisioning and is brew-safe — it makes no PATH or binary changes (no
+  # second pyve in ~/.local/bin). Run it here so Homebrew users get hosted
+  # project-guide at install/upgrade time instead of hitting the bare/asdf
+  # trap on their first `pyve init`.
+  def post_install
+    # Best-effort: a provisioning hiccup (e.g. no network in the
+    # post-install sandbox) must not fail `brew install`. `self provision`
+    # itself already exits 0, but guard against any unexpected non-zero.
+    system bin/"pyve", "self", "provision"
+  rescue BuildError
+    opoo "pyve: toolchain/project-guide provisioning was skipped; run 'pyve self provision' later."
+  end
+
   test do
     assert_match "pyve version #{version}", shell_output("#{bin}/pyve --version")
   end
