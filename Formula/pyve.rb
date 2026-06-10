@@ -25,22 +25,6 @@ class Pyve < Formula
     chmod 0755, bin/"pyve"
   end
 
-  # `pyve self install` (the source-install path) refuses to run for
-  # Homebrew-managed installs, so it never provisions Pyve's toolchain venv
-  # or the hosted project-guide. `pyve self provision` does exactly that
-  # provisioning and is brew-safe — it makes no PATH or binary changes (no
-  # second pyve in ~/.local/bin). Run it here so Homebrew users get hosted
-  # project-guide at install/upgrade time instead of hitting the bare/asdf
-  # trap on their first `pyve init`.
-  def post_install
-    # Best-effort: a provisioning hiccup (e.g. no network in the
-    # post-install sandbox) must not fail `brew install`. `self provision`
-    # itself already exits 0, but guard against any unexpected non-zero.
-    system bin/"pyve", "self", "provision"
-  rescue BuildError
-    opoo "pyve: toolchain/project-guide provisioning was skipped; run 'pyve self provision' later."
-  end
-
   # `pyve self provision` (run at install/upgrade time, above) creates files
   # OUTSIDE Homebrew's prefix that `brew uninstall pyve` cannot clean up:
   #   - the toolchain Python venv at ~/.local/share/pyve/toolchain/
@@ -50,18 +34,19 @@ class Pyve < Formula
   # brew-safe teardown so they can remove them deliberately.
   def caveats
     <<~EOS
-      pyve hosts a toolchain Python venv and the Project-Guide CLI outside
+      Pyve hosts a toolchain Python venv with the Project-Guide CLI outside
       Homebrew's prefix:
         ~/.local/share/pyve/toolchain/   (toolchain Python + hosted tools)
         ~/.local/bin/project-guide       (Project-Guide shim)
 
-      `brew uninstall pyve` CANNOT remove these. For full teardown of the
-      hosted tools, run the commands in this order:
-        pyve self unprovision --all
-        brew uninstall pyve
+      First-time setup — install the Pyve toolchain + the Project-Guide CLI:
+        pyve self provision
 
       Uninstalling Pyve alone leaves Project-Guide working in your projects
-      (via the shim above); only the teardown commands above remove it.
+      (via the shim above); `brew uninstall pyve` CANNOT remove these.
+      For a full uninstall of Pyve and the toolchain, run in this order:
+        pyve self unprovision --all
+        brew uninstall pyve
 
       You can reprovision the toolchain any time while Pyve is installed,
       and it will upgrade the hosted Project-Guide:
