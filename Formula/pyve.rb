@@ -1,8 +1,8 @@
 class Pyve < Formula
   desc "Single, easy entry point for all your virtual environments"
   homepage "https://pointmatic.github.io/pyve"
-  url "https://github.com/pointmatic/pyve/archive/refs/tags/v3.0.1.tar.gz"
-  sha256 "da297268f6e0fb6e6d93990ea0860d9dd2ab261047b48f7e75d53bfe4961ac28"
+  url "https://github.com/pointmatic/pyve/archive/refs/tags/v3.0.2.tar.gz"
+  sha256 "24b2aef76766baf9cc16cc38f42455e8bd095c81ce1577351175163512bf73a5"
   license "Apache-2.0"
 
   # tomllib (used by pyve) requires Python >= 3.11. This brew Python only
