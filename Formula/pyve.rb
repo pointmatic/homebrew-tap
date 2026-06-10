@@ -50,19 +50,27 @@ class Pyve < Formula
   # brew-safe teardown so they can remove them deliberately.
   def caveats
     <<~EOS
-      pyve hosts a toolchain Python venv and the project-guide CLI outside
+      pyve hosts a toolchain Python venv and the Project-Guide CLI outside
       Homebrew's prefix:
         ~/.local/share/pyve/toolchain/   (toolchain Python + hosted tools)
-        ~/.local/bin/project-guide        (project-guide shim)
+        ~/.local/bin/project-guide       (Project-Guide shim)
 
-      `brew uninstall pyve` does NOT remove these. For full teardown of the
-      hosted tools, run before (or after) uninstalling:
+      `brew uninstall pyve` CANNOT remove these. For full teardown of the
+      hosted tools, run the commands in this order:
         pyve self unprovision --all
+        brew uninstall pyve
 
-      To upgrade just the hosted project-guide without re-running brew:
+      Uninstalling Pyve alone leaves Project-Guide working in your projects
+      (via the shim above); only the teardown commands above remove it.
+
+      You can reprovision the toolchain any time while Pyve is installed,
+      and it will upgrade the hosted Project-Guide:
         pyve self provision        # always pip-installs --upgrade
-      (`pyve update` refreshes a project's scaffolding; it does NOT bump the
-      hosted project-guide version.)
+      (`pyve update` refreshes a project's scaffolding from the version of
+      Project-Guide already hosted in the toolchain; it does NOT upgrade it.)
+
+      For general info about Project-Guide, see
+      https://pointmatic.github.io/project-guide/
     EOS
   end
 
