@@ -61,5 +61,22 @@ class Pyve < Formula
 
   test do
     assert_match "pyve version #{version}", shell_output("#{bin}/pyve --version")
+
+    # v3 end-to-end smoke: initialize a venv-backed project and confirm the
+    # v3 manifest (pyve.toml) and environment (.venv) are materialized — this
+    # exercises the real v3 command surface, not a retired v2 command. The
+    # sandbox has no version manager, so expose the formula's Python as bare
+    # `python` (pyve invokes `python` directly), and suppress every prompt and
+    # all network access (project-guide hosting).
+    (testpath/"shims").mkpath
+    (testpath/"shims/python").make_symlink(Formula["python@3.12"].opt_bin/"python3.12")
+    ENV.prepend_path "PATH", testpath/"shims"
+    ENV["PYVE_INIT_NONINTERACTIVE"] = "1"
+    ENV["PYVE_NO_PROJECT_GUIDE"] = "1"
+    ENV["PYVE_NO_PROJECT_GUIDE_COMPLETION"] = "1"
+
+    system bin/"pyve", "init", "--backend", "venv"
+    assert_predicate testpath/"pyve.toml", :exist?
+    assert_predicate testpath/".venv/bin/python", :exist?
   end
 end
