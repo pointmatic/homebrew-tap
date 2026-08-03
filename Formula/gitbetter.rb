@@ -1,5 +1,5 @@
 class Gitbetter < Formula
-  desc "Streamline repetitive git workflows (push, tag) into single interactive commands"
+  desc "Streamline repetitive git workflows (push, commit, tag) into small set of interactive commands"
   homepage "https://github.com/pointmatic/gitbetter"
   url "https://github.com/pointmatic/gitbetter/archive/refs/tags/v1.7.0.tar.gz"
   sha256 "861ea0a4445c2eca78a2f91f61e4e74358fa18648ea5af1fe7200aee4c4e8d51"
