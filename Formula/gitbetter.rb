@@ -6,7 +6,7 @@ class Gitbetter < Formula
   license "Apache-2.0"
 
   def install
-    libexec.install "lib", "gitbetter.sh", "git-push.sh", "git-tag.sh"
+    libexec.install "lib", "gitbetter.sh", "git-push.sh", "git-commit.sh", "git-tag.sh"
     (bin/"gitbetter").write <<~SH
       #!/usr/bin/env bash
       exec "#{libexec}/gitbetter.sh" "$@"
@@ -15,16 +15,21 @@ class Gitbetter < Formula
       #!/usr/bin/env bash
       exec "#{libexec}/git-push.sh" "$@"
     SH
+    (bin/"git-commit").write <<~SH
+      #!/usr/bin/env bash
+      exec "#{libexec}/git-commit.sh" "$@"
+    SH
     (bin/"git-tag").write <<~SH
       #!/usr/bin/env bash
       exec "#{libexec}/git-tag.sh" "$@"
     SH
-    chmod 0555, [bin/"gitbetter", bin/"git-push", bin/"git-tag"]
+    chmod 0555, [bin/"gitbetter", bin/"git-push", bin/"git-commit", bin/"git-tag"]
   end
 
   test do
     assert_match "v#{version}", shell_output("#{bin}/gitbetter --version")
     assert_match "v#{version}", shell_output("#{bin}/git-push --version")
+    assert_match "v#{version}", shell_output("#{bin}/git-commit --version")
     assert_match "v#{version}", shell_output("#{bin}/git-tag --version")
   end
 end
